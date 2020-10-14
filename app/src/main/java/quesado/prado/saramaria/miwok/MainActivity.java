@@ -15,18 +15,53 @@
  */
 package quesado.prado.saramaria.miwok;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.TextView;
 
 import quesado.prado.saramaria.miwok.R;
 
 public class MainActivity extends AppCompatActivity {
-
+    public NumbersClickListener clickListener;
+    public TextView numberTextView,familyTextView,colorTextView,phraseTextview;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_main);
+        //Forma 1 de hacer intent (en el caso de que vayas a usar el Listener desde varias vistas)
+        clickListener=new NumbersClickListener();
+        numberTextView= (TextView) findViewById(R.id.numbers);
+        numberTextView.setOnClickListener(clickListener);
+        //Forma 2 de hacer intent
+        familyTextView= (TextView) findViewById(R.id.family);
+        familyTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(v.getContext(),FamilyActivity.class);
+                v.getContext().startActivity(intent);
+            }
+        });
+
+        colorTextView= (TextView) findViewById(R.id.colors);
+        colorTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(v.getContext(),ColorActivity.class);
+                v.getContext().startActivity(intent);
+            }
+        });
+
+        phraseTextview= (TextView) findViewById(R.id.phrases);
+        phraseTextview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(v.getContext(),PhraseActivity.class);
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 }
