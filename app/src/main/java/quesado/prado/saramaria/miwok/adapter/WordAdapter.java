@@ -1,6 +1,7 @@
 package quesado.prado.saramaria.miwok.adapter;
 
 import android.content.Context;
+import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,14 +20,15 @@ import quesado.prado.saramaria.miwok.Word;
 public class WordAdapter extends ArrayAdapter<Word> {
     ArrayList<Word> words;
     int backgroundColor;
+    //MediaPlayer mediaPlayer;
     public WordAdapter(@NonNull Context context, ArrayList<Word> words,int backgroundColor) {
         super(context,0, words);
         this.words=words;
         this.backgroundColor=backgroundColor;
+       // mediaPlayer=MediaPlayer.create(context,R.raw.number_one);
     }
 
     public View getView(int position, View convertView, ViewGroup parent){
-
         View listItemView=convertView;
         if (listItemView==null){
             listItemView= LayoutInflater.from(getContext()).inflate(R.layout.item_list_layout,parent,false);
@@ -34,6 +36,13 @@ public class WordAdapter extends ArrayAdapter<Word> {
 
         LinearLayout linearLayout= (LinearLayout) listItemView.findViewById(R.id.layoutWords);
         linearLayout.setBackgroundResource(backgroundColor);
+
+//        linearLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mediaPlayer.start();
+//            }
+//        });
 
         Word word=words.get(position);
 
