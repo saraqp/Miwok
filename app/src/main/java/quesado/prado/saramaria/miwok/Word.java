@@ -7,6 +7,7 @@ public class Word {
     public Word(String word_ingles,String word_miwok){
         this.word_ingles = word_ingles;
         this.word_miwok = word_miwok;
+        this.imagenResourceId=-1;
     }
     public Word(String word_ingles,String word_miwok,int imagenResourceId){
         this.word_miwok=word_miwok;
@@ -38,5 +39,8 @@ public class Word {
 
     public void setImagenResourceId(int imagenResourceId) {
         this.imagenResourceId = imagenResourceId;
+    }
+    public boolean tieneImagen(){
+        return imagenResourceId!=-1;
     }
 }

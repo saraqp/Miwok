@@ -7,9 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -18,24 +18,39 @@ import quesado.prado.saramaria.miwok.Word;
 
 public class WordAdapter extends ArrayAdapter<Word> {
     ArrayList<Word> words;
-    public WordAdapter(@NonNull Context context, ArrayList<Word> words) {
+    int backgroundColor;
+    public WordAdapter(@NonNull Context context, ArrayList<Word> words,int backgroundColor) {
         super(context,0, words);
         this.words=words;
+        this.backgroundColor=backgroundColor;
     }
 
     public View getView(int position, View convertView, ViewGroup parent){
+
         View listItemView=convertView;
         if (listItemView==null){
             listItemView= LayoutInflater.from(getContext()).inflate(R.layout.item_list_layout,parent,false);
         }
+
+        LinearLayout linearLayout= (LinearLayout) listItemView.findViewById(R.id.layoutWords);
+        linearLayout.setBackgroundResource(backgroundColor);
+
+        Word word=words.get(position);
+
         TextView miwok_word= (TextView) listItemView.findViewById(R.id.miwokTextView);
-        miwok_word.setText(words.get(position).getWord_miwok());
+        miwok_word.setText(word.getWord_miwok());
 
         TextView ingles_word= (TextView) listItemView.findViewById(R.id.inglesTextView);
-        ingles_word.setText(words.get(position).getWord_ingles());
+        ingles_word.setText(word.getWord_ingles());
 
         ImageView imageView= (ImageView) listItemView.findViewById(R.id.imagen);
-        imageView.setImageResource(words.get(position).getImagenResourceId());
+
+        if (word.tieneImagen()) {
+            imageView.setImageResource(word.getImagenResourceId());
+        }else {
+            imageView.setVisibility(View.GONE);
+        }
+
         return listItemView;
     }
 }

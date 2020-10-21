@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     tools:context="quesado.prado.saramaria.miwok.NumbersActivity"
     android:id="@+id/ListView"
-    android:padding="16dp"
     android:orientation="vertical">
 
 </ListView>
