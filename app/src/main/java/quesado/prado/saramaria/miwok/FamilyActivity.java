@@ -1,5 +1,7 @@
 package quesado.prado.saramaria.miwok;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,14 +14,33 @@ import java.util.ArrayList;
 import quesado.prado.saramaria.miwok.adapter.WordAdapter;
 
 public class FamilyActivity extends AppCompatActivity {
+    final ArrayList<Word> family= new ArrayList<>();
     WordAdapter adapter;
     MediaPlayer mediaPlayer;
+    private AudioManager audioManager;
+
+    private AudioManager.OnAudioFocusChangeListener audioListener= new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT|| focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK){
+                mediaPlayer.pause();
+                mediaPlayer.seekTo(0);
+
+            }else if(focusChange== AudioManager.AUDIOFOCUS_GAIN){
+                mediaPlayer.start();
+
+            }else if( focusChange== AudioManager.AUDIOFOCUS_LOSS){
+                releaseMediaPlayer();
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_family);
 
-        final ArrayList<Word> family= new ArrayList<>();
+        audioManager= (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
         family.add(new Word("Father","әpә",R.drawable.family_father,R.raw.family_father));
         family.add(new Word("mother","әṭa",R.drawable.family_mother,R.raw.family_mother));
         family.add(new Word("son","angsi",R.drawable.family_son,R.raw.family_son));
@@ -38,9 +59,27 @@ public class FamilyActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mediaPlayer= MediaPlayer.create(view.getContext(),family.get(position).getAudio_palabra());
-                mediaPlayer.start();
+                releaseMediaPlayer();
+
+                int result=audioManager.requestAudioFocus(audioListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+
+                if (result==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
+                    mediaPlayer=MediaPlayer.create(view.getContext(),family.get(position).getAudio_palabra());
+                    mediaPlayer.start();
+                }
             }
         });
+    }
+    private void releaseMediaPlayer(){
+        if (mediaPlayer!=null){
+            mediaPlayer.release();
+            mediaPlayer=null;
+        }
+        audioManager.abandonAudioFocus(audioListener);
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        releaseMediaPlayer();
     }
 }

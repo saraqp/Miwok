@@ -1,5 +1,8 @@
 package quesado.prado.saramaria.miwok;
 
+import android.content.Context;
+import android.media.AudioDeviceCallback;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,10 +18,29 @@ public class PhraseActivity extends AppCompatActivity {
     ArrayList<Word> phrases=new ArrayList<>();
     WordAdapter adapter;
     MediaPlayer mediaPlayer;
+    private AudioManager audioManager;
+
+    private AudioManager.OnAudioFocusChangeListener audioListener= new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT|| focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK){
+                mediaPlayer.pause();
+                mediaPlayer.seekTo(0);
+
+            }else if(focusChange== AudioManager.AUDIOFOCUS_GAIN){
+                mediaPlayer.start();
+
+            }else if( focusChange== AudioManager.AUDIOFOCUS_LOSS){
+                releaseMediaPlayer();
+            }
+        }
+    };
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phrase);
+
+        audioManager= (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         phrases.add(new Word("Where are you going?","minto wuksus",R.raw.phrase_where_are_you_going));
         phrases.add(new Word("What is your name?","tinnә oyaase'nә",R.raw.phrase_what_is_your_name));
@@ -38,9 +60,27 @@ public class PhraseActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mediaPlayer=MediaPlayer.create(view.getContext(),phrases.get(position).getAudio_palabra());
-                mediaPlayer.start();
+                releaseMediaPlayer();
+
+                int result=audioManager.requestAudioFocus(audioListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+
+                if (result==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
+                    mediaPlayer=MediaPlayer.create(view.getContext(),phrases.get(position).getAudio_palabra());
+                    mediaPlayer.start();
+                }
             }
         });
+    }
+    private void releaseMediaPlayer(){
+        if (mediaPlayer!=null){
+            mediaPlayer.release();
+            mediaPlayer=null;
+        }
+        audioManager.abandonAudioFocus(audioListener);
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+        releaseMediaPlayer();
     }
 }
