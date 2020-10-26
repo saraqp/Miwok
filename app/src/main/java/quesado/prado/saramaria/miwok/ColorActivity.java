@@ -3,6 +3,7 @@ package quesado.prado.saramaria.miwok;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -38,6 +39,9 @@ public class ColorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_color);
+
+        ActionBar actionBar= getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         audioManager= (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 

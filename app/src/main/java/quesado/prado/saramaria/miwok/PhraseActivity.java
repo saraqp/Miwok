@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.AudioDeviceCallback;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -39,6 +40,9 @@ public class PhraseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_phrase);
+
+        ActionBar actionBar= getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         audioManager= (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 

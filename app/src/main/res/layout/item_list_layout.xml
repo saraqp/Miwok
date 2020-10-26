@@ -12,30 +12,39 @@
         android:layout_alignParentLeft="true"
         android:id="@+id/imagen"
         android:src="@mipmap/ic_launcher"/>
+
     <LinearLayout
         android:id="@+id/layoutWords"
         android:layout_width="match_parent"
         android:layout_height="88dp"
+        android:layout_toRightOf="@id/imagen"
         android:orientation="vertical"
-        android:paddingLeft="16dp"
-        android:layout_toRightOf="@id/imagen">
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:id="@+id/miwokTextView"
-            android:textSize="18sp"
-            android:text="Lutti"
-            android:textStyle="bold"
-            android:textColor="@color/words_color"
-            android:gravity="bottom"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textColor="@color/words_color"
-            android:id="@+id/inglesTextView"
-            android:text="One" />
-    </LinearLayout>
+        android:paddingLeft="16dp">
 
+        <TextView
+            android:id="@+id/miwokTextView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:text="Lutti"
+            android:textColor="@color/words_color"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/inglesTextView"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="One"
+            android:textColor="@color/words_color" />
+    </LinearLayout>
+    <ImageView
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:id="@+id/icon_play"
+        android:src="@mipmap/play_arrow"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"/>
 </RelativeLayout>
