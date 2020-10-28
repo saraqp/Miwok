@@ -35,14 +35,6 @@ public class NumbersFragment extends Fragment {
         }
     };
 
-    private MediaPlayer.OnCompletionListener mCompletionListener = new MediaPlayer.OnCompletionListener() {
-        @Override
-        public void onCompletion(MediaPlayer mediaPlayer) {
-            // Now that the sound file has finished playing, release the media player resources.
-            releaseMediaPlayer();
-        }
-    };
-
     public NumbersFragment() {
         // Required empty public constructor
     }

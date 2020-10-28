@@ -37,6 +37,9 @@ public class FamilyFragment extends Fragment {
         }
     };
 
+    public FamilyFragment() {
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

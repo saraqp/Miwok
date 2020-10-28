@@ -38,6 +38,9 @@ public class PhraseFragment extends Fragment {
         }
     };
 
+    public PhraseFragment() {
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
