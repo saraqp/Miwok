@@ -41,7 +41,7 @@ public class NumbersFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootView= (ViewGroup) inflater.inflate(R.layout.item_list_layout,container,false);
+        ViewGroup rootView= (ViewGroup) inflater.inflate(R.layout.word_list,container,false);
 
         audioManager= (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
@@ -57,7 +57,7 @@ public class NumbersFragment extends Fragment {
         words.add(new Word("Ten","Na'aacha",R.drawable.number_ten,R.raw.number_ten));
 
         adapter = new WordAdapter(getActivity(), words,R.color.category_numbers);
-        ListView listView= (ListView) rootView.findViewById(R.id.ListView);
+        ListView listView= (ListView) rootView.findViewById(R.id.list);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

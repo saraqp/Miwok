@@ -17,34 +17,32 @@ import java.util.ArrayList;
 import quesado.prado.saramaria.miwok.adapter.WordAdapter;
 
 public class PhraseFragment extends Fragment {
-    ArrayList<Word> phrases=new ArrayList<>();
+    ArrayList<Word> phrases= new ArrayList<>();
     WordAdapter adapter;
-    MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
     private AudioManager audioManager;
 
     private AudioManager.OnAudioFocusChangeListener audioListener= new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
-            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT|| focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK){
+            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK){
                 mediaPlayer.pause();
                 mediaPlayer.seekTo(0);
-
-            }else if(focusChange== AudioManager.AUDIOFOCUS_GAIN){
+            } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN){
                 mediaPlayer.start();
-
-            }else if( focusChange== AudioManager.AUDIOFOCUS_LOSS){
+            } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS){
                 releaseMediaPlayer();
             }
         }
     };
 
     public PhraseFragment() {
+        // Required empty public constructor
     }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootView= (ViewGroup) inflater.inflate(R.layout.item_list_layout,container,false);
+        ViewGroup rootView= (ViewGroup) inflater.inflate(R.layout.word_list,container,false);
 
         audioManager= (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
@@ -59,10 +57,9 @@ public class PhraseFragment extends Fragment {
         phrases.add(new Word("Let’s go.","yoowutis",R.raw.phrase_lets_go));
         phrases.add(new Word("Come here.","әnni'nem",R.raw.phrase_come_here));
 
-        adapter = new WordAdapter(getContext(), phrases,R.color.category_phrases);
-        ListView listView= (ListView) getActivity().findViewById(R.id.ListView);
-        listView.setAdapter(adapter);
 
+        adapter = new WordAdapter(getActivity(), phrases,R.color.category_phrases);
+        ListView listView= (ListView) rootView.findViewById(R.id.list);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -70,13 +67,20 @@ public class PhraseFragment extends Fragment {
 
                 int result=audioManager.requestAudioFocus(audioListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 
-                if (result==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
-                    mediaPlayer=MediaPlayer.create(view.getContext(),phrases.get(position).getAudio_palabra());
+                if (result==AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                    mediaPlayer = MediaPlayer.create(view.getContext(), phrases.get(position).getAudio_palabra());
                     mediaPlayer.start();
                 }
             }
         });
-        return inflater.inflate(R.layout.fragment_phrase, container, false);
+        listView.setAdapter(adapter);
+        return rootView;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releaseMediaPlayer();
     }
 
     private void releaseMediaPlayer(){
@@ -85,10 +89,5 @@ public class PhraseFragment extends Fragment {
             mediaPlayer=null;
         }
         audioManager.abandonAudioFocus(audioListener);
-    }
-    @Override
-    public void onStop() {
-        super.onStop();
-        releaseMediaPlayer();
     }
 }

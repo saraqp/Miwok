@@ -16,34 +16,32 @@ import java.util.ArrayList;
 import quesado.prado.saramaria.miwok.adapter.WordAdapter;
 
 public class ColorFragment extends Fragment {
-    ArrayList<Word> colors=new ArrayList<>();
+    ArrayList<Word> colors= new ArrayList<>();
     WordAdapter adapter;
-    MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer;
     private AudioManager audioManager;
 
     private AudioManager.OnAudioFocusChangeListener audioListener= new AudioManager.OnAudioFocusChangeListener() {
         @Override
         public void onAudioFocusChange(int focusChange) {
-            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT|| focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK){
+            if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK){
                 mediaPlayer.pause();
                 mediaPlayer.seekTo(0);
-
-            }else if(focusChange== AudioManager.AUDIOFOCUS_GAIN){
+            } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN){
                 mediaPlayer.start();
-
-            }else if( focusChange== AudioManager.AUDIOFOCUS_LOSS){
+            } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS){
                 releaseMediaPlayer();
             }
         }
     };
 
     public ColorFragment() {
-
+        // Required empty public constructor
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        ViewGroup rootView= (ViewGroup) inflater.inflate(R.layout.item_list_layout,container,false);
+        ViewGroup rootView= (ViewGroup) inflater.inflate(R.layout.word_list,container,false);
 
         audioManager= (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
@@ -57,8 +55,7 @@ public class ColorFragment extends Fragment {
         colors.add(new Word("mustard yellow","chiwiiṭә",R.drawable.color_mustard_yellow,R.raw.color_mustard_yellow));
 
         adapter = new WordAdapter(getActivity(), colors,R.color.category_colors);
-        ListView listView= (ListView) getActivity().findViewById(R.id.ListView);
-        listView.setAdapter(adapter);
+        ListView listView= (ListView) rootView.findViewById(R.id.list);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -66,13 +63,14 @@ public class ColorFragment extends Fragment {
 
                 int result=audioManager.requestAudioFocus(audioListener,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 
-                if (result==AudioManager.AUDIOFOCUS_REQUEST_GRANTED){
-                    mediaPlayer=MediaPlayer.create(view.getContext(),colors.get(position).getAudio_palabra());
+                if (result==AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+                    mediaPlayer = MediaPlayer.create(view.getContext(), colors.get(position).getAudio_palabra());
                     mediaPlayer.start();
                 }
             }
         });
-        return inflater.inflate(R.layout.fragment_color, container, false);
+        listView.setAdapter(adapter);
+        return rootView;
     }
 
     @Override
@@ -88,5 +86,4 @@ public class ColorFragment extends Fragment {
         }
         audioManager.abandonAudioFocus(audioListener);
     }
-
 }

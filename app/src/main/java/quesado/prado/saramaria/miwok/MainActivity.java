@@ -17,11 +17,15 @@ package quesado.prado.saramaria.miwok;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TableLayout;
 import android.widget.TextView;
 
 import quesado.prado.saramaria.miwok.R;
+import quesado.prado.saramaria.miwok.adapter.MiwokViewPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {
     public NumbersClickListener clickListener;
@@ -32,6 +36,15 @@ public class MainActivity extends AppCompatActivity {
 
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.activity_main);
+
+        TabLayout tablayout= (TabLayout) findViewById(R.id.tablayout);
+        ViewPager viewPager= (ViewPager) findViewById(R.id.pager_view);
+
+        MiwokViewPagerAdapter pagerAdapter=new MiwokViewPagerAdapter(getSupportFragmentManager());
+        viewPager.setAdapter(pagerAdapter);
+
+        tablayout.setupWithViewPager(viewPager);
+        /*
         //Forma 1 de hacer intent (en el caso de que vayas a usar el Listener desde varias vistas)
         clickListener=new NumbersClickListener();
         numberTextView= (TextView) findViewById(R.id.numbers);
@@ -63,5 +76,7 @@ public class MainActivity extends AppCompatActivity {
                 v.getContext().startActivity(intent);
             }
         });
+         */
+
     }
 }
